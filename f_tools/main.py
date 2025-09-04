@@ -4,10 +4,10 @@ import argparse
 import sys
 from pathlib import Path
 
-from f_tool.commands.move import move_command
-from f_tool.commands.copy import copy_command
-from f_tool.commands.backup import backup_command
-from f_tool.ui.i18n import i18n
+from f_tools.commands.move import move_command
+from f_tools.commands.copy import copy_command
+from f_tools.commands.backup import backup_command
+from f_tools.ui.i18n import i18n
 
 
 def create_parser() -> argparse.ArgumentParser:

@@ -75,7 +75,7 @@ cd f-tools
 pip install tqdm send2trash
 
 # 运行
-python -m f_tool.main --help
+python -m f_tools.main --help
 ```
 
 ### 创建快捷方式（可选）
@@ -90,7 +90,7 @@ source ~/.bashrc
 echo 'alias f="uv --directory /path/to/f-tools run f-tools"' >> ~/.bashrc
 
 # 或使用 Python 的别名
-echo 'alias f="cd /path/to/f-tools && python -m f_tool.main"' >> ~/.bashrc
+echo 'alias f="cd /path/to/f-tools && python -m f_tools.main"' >> ~/.bashrc
 source ~/.bashrc
 ```
 

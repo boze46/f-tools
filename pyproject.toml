@@ -30,7 +30,7 @@ dependencies = [
 ]
 
 [project.scripts]
-f-tools = "f_tool.main:main"
+f-tools = "f_tools.main:main"
 
 [project.urls]
 Homepage = "https://github.com/boze46/f-tools"
@@ -38,4 +38,4 @@ Repository = "https://github.com/boze46/f-tools.git"
 Issues = "https://github.com/boze46/f-tools/issues"
 
 [tool.hatch.build.targets.wheel]
-packages = ["f_tool"]
+packages = ["f_tools"]
