@@ -12,9 +12,9 @@ wheels = [
 ]
 
 [[package]]
-name = "f-tool"
+name = "f-tools"
 version = "0.1.0"
-source = { virtual = "." }
+source = { editable = "." }
 dependencies = [
     { name = "send2trash" },
     { name = "tqdm" },

@@ -15,24 +15,61 @@
 
 ## 安装和运行
 
-### 方式一：使用 uv（推荐）
+### 方式一：从 Release 安装（推荐）
+
+下载预构建的包并安装：
+
+```bash
+# 下载 wheel 文件
+wget https://github.com/boze46/f-tools/releases/latest/download/f_tools-0.1.0-py3-none-any.whl
+
+# 安装（推荐使用 pipx 进行全局安装）
+pipx install f_tools-0.1.0-py3-none-any.whl
+
+# 或使用 pip 安装
+pip install f_tools-0.1.0-py3-none-any.whl
+
+# 使用命令
+f-tools --help
+
+# 创建别名（可选）
+echo 'alias f="f-tools"' >> ~/.bashrc
+source ~/.bashrc
+```
+
+### 方式二：从源码安装
 
 ```bash
 # 克隆项目
-git clone <repository-url>
-cd f
+git clone https://github.com/boze46/f-tools.git
+cd f-tools
+
+# 构建并安装
+uv build
+pip install dist/f_tools-0.1.0-py3-none-any.whl
+
+# 使用命令
+f-tools --help
+```
+
+### 方式三：开发模式（使用 uv）
+
+```bash
+# 克隆项目
+git clone https://github.com/boze46/f-tools.git
+cd f-tools
 
 # 使用 uv 安装依赖并运行
 uv sync
-uv run python -m f_tool.main --help
+uv run f-tools --help
 ```
 
-### 方式二：使用 Python
+### 方式四：使用 Python
 
 ```bash
 # 克隆项目
-git clone <repository-url>
-cd f
+git clone https://github.com/boze46/f-tools.git
+cd f-tools
 
 # 安装依赖
 pip install tqdm send2trash
@@ -43,14 +80,18 @@ python -m f_tool.main --help
 
 ### 创建快捷方式（可选）
 
-在 `~/.bashrc` 或 `~/.zshrc` 中添加别名：
-
 ```bash
+# 如果通过方式一安装，推荐创建别名
+echo 'alias f="f-tools"' >> ~/.bashrc
+source ~/.bashrc
+
+# 如果使用开发模式，可以创建以下别名
 # 使用 uv 的别名
-alias f='cd /path/to/f && uv run python -m f_tool.main'
+echo 'alias f="uv --directory /path/to/f-tools run f-tools"' >> ~/.bashrc
 
 # 或使用 Python 的别名
-alias f='cd /path/to/f && python -m f_tool.main'
+echo 'alias f="cd /path/to/f-tools && python -m f_tool.main"' >> ~/.bashrc
+source ~/.bashrc
 ```
 
 ## 命令使用指南
@@ -59,21 +100,21 @@ alias f='cd /path/to/f && python -m f_tool.main'
 
 ```bash
 # 基本移动
-f move file.txt target/
+f-tools move file.txt target/
 
 # 多文件移动
-f move file1.txt file2.txt file3.txt target/
-f move *.txt target/
+f-tools move file1.txt file2.txt file3.txt target/
+f-tools move *.txt target/
 
 # 自动创建目标目录
-f move file.txt /new/path/ -p
+f-tools move file.txt /new/path/ -p
 
 # 强制覆盖 / 跳过覆盖
-f move file.txt target/ -f        # 强制覆盖
-f move file.txt target/ -n        # 从不覆盖
+f-tools move file.txt target/ -f        # 强制覆盖
+f-tools move file.txt target/ -n        # 从不覆盖
 
 # 详细输出
-f move file.txt target/ -v
+f-tools move file.txt target/ -v
 ```
 
 **解决的痛点：**
@@ -84,23 +125,23 @@ mkdir -p /new/path               # 手动创建
 mv file.txt /new/path/           # 再次执行
 
 # F-Tool 方式
-f move file.txt /new/path/ -p    # 一步完成
+f-tools move file.txt /new/path/ -p    # 一步完成
 ```
 
 ### 2. 复制文件（copy/cp）
 
 ```bash
 # 基本复制（源文件保留）
-f copy file.txt target/
+f-tools copy file.txt target/
 
 # 目录复制（默认递归）
-f copy project/ backup_location/
+f-tools copy project/ backup_location/
 
 # 多文件复制
-f copy *.txt documents/
+f-tools copy *.txt documents/
 
 # 自动创建目录
-f copy file.txt /backup/today/ -p
+f-tools copy file.txt /backup/today/ -p
 ```
 
 **特点：**
@@ -112,18 +153,18 @@ f copy file.txt /backup/today/ -p
 
 ```bash
 # 单文件备份
-f backup important.txt           # → important.txt.bak
+f-tools backup important.txt           # → important.txt.bak
 
 # 目录备份
-f backup project/                # → project.bak
+f-tools backup project/                # → project.bak
 
 # 多文件备份
-f backup *.py config.json
+f-tools backup *.py config.json
 
 # 智能避免冲突
-f backup file.txt                # → file.txt.bak
-f backup file.txt                # → file.txt.bak2
-f backup file.txt                # → file.txt.bak3
+f-tools backup file.txt                # → file.txt.bak
+f-tools backup file.txt                # → file.txt.bak2
+f-tools backup file.txt                # → file.txt.bak3
 ```
 
 **特点：**
@@ -144,9 +185,9 @@ f backup file.txt                # → file.txt.bak3
 ### 别名命令
 
 ```bash
-f move   ≡ f mv      # 移动文件
-f copy   ≡ f cp      # 复制文件  
-f backup ≡ f bak     # 备份文件
+f-tools move   ≡ f-tools mv      # 移动文件
+f-tools copy   ≡ f-tools cp      # 复制文件  
+f-tools backup ≡ f-tools bak     # 备份文件
 ```
 
 ## 智能交互
@@ -154,7 +195,7 @@ f backup ≡ f bak     # 备份文件
 ### 目录创建确认
 
 ```bash
-$ f move file.txt /new/path/
+$ f-tools move file.txt /new/path/
 目标目录不存在，是否创建: /new/path ? [Y/n] y
 创建目录: /new/path
 移动 file.txt → /new/path
@@ -163,7 +204,7 @@ $ f move file.txt /new/path/
 ### 文件覆盖选择
 
 ```bash
-$ f copy file.txt existing/
+$ f-tools copy file.txt existing/
 文件已存在: existing/file.txt
 [Y]是(默认) [n]否 [a]全部 [s]跳过全部 [q]退出: a
 ```
