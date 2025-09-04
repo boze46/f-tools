@@ -7,6 +7,7 @@ from pathlib import Path
 from f_tools.commands.move import move_command
 from f_tools.commands.copy import copy_command
 from f_tools.commands.backup import backup_command
+from f_tools.commands.rename import rename_command
 from f_tools.ui.i18n import i18n
 
 
@@ -119,6 +120,36 @@ def create_parser() -> argparse.ArgumentParser:
         help='Never overwrite existing backup files'
     )
     
+    # Rename command
+    rename_parser = subparsers.add_parser(
+        'rename', 
+        aliases=['ren'],
+        help='Rename files or directories within the same directory'
+    )
+    rename_parser.add_argument(
+        'old_path',
+        help='Path to the file or directory to rename'
+    )
+    rename_parser.add_argument(
+        'new_name',
+        help='New name (filename only, no path separators allowed)'
+    )
+    rename_parser.add_argument(
+        '-f', '--force', 
+        action='store_true',
+        help='Force overwrite existing files'
+    )
+    rename_parser.add_argument(
+        '-v', '--verbose', 
+        action='store_true',
+        help='Show verbose operation information'
+    )
+    rename_parser.add_argument(
+        '-n', '--no-clobber', 
+        action='store_true',
+        help='Never overwrite existing files'
+    )
+    
     return parser
 
 
@@ -181,6 +212,23 @@ def main() -> None:
             # Execute backup command
             success = backup_command(
                 sources=args.sources,
+                force=args.force,
+                verbose=args.verbose,
+                no_clobber=args.no_clobber
+            )
+            
+            sys.exit(0 if success else 1)
+        elif args.command in ('rename', 'ren'):
+            # Validate conflicting options
+            if args.force and args.no_clobber:
+                print(i18n.error("Error: Cannot use --force and --no-clobber together"), 
+                      file=sys.stderr)
+                sys.exit(1)
+            
+            # Execute rename command
+            success = rename_command(
+                old_path=args.old_path,
+                new_name=args.new_name,
                 force=args.force,
                 verbose=args.verbose,
                 no_clobber=args.no_clobber
